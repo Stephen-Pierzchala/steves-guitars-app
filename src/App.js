@@ -1,20 +1,27 @@
 import "./App.css";
 import { Switch, Route } from "react-router-dom";
-import Home from "./Components/Home/Home";
-import Login from "./Components/Login/Login";
-import Checkout from "./Components/Checkout/Checkout";
-import ViewCart from "./Components/ViewCart/ViewCart";
+import React from "react";
+import Navbar from "./Components/Navigation/Navbar";
+import routes from "./Routes/Routes";
 
 function App() {
 	return (
-		<main>
+		<React.Fragment>
+			<Navbar />
+
 			<Switch>
-				<Route path="/" component={Home} exact />
-				<Route path="/Login" component={Login} />
-				<Route path="/Checkout" component={Checkout} />
-				<Route path="/ViewCart" component={ViewCart} />
+				{routes.reverse().map((arg) => {
+					return (
+						<Route
+							key={arg.path}
+							path={arg.path}
+							component={arg.component}
+							exact
+						/>
+					);
+				})}
 			</Switch>
-		</main>
+		</React.Fragment>
 	);
 }
 
