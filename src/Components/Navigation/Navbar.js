@@ -47,7 +47,7 @@ const Navbar = (props) => {
 				onClose={() => setOpen(false)}
 				classes={{ paper: classes.drawer }}
 			>
-				<NavLinks />
+				<NavLinks setOpen={setOpen} />
 			</Drawer>
 			<AppBar variant="outlined">
 				<Toolbar>
@@ -91,6 +91,7 @@ const NavLinks = (props) => {
 							className={classes.navLink}
 							onClick={() => {
 								setCurrentPage(routeItem.path);
+								props.setOpen(false);
 							}}
 						>
 							<ListItem

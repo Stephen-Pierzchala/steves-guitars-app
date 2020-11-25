@@ -2,6 +2,7 @@ import Home from "../Components/Home/Home";
 import Login from "../Components/Login/Login";
 import Checkout from "../Components/Checkout/Checkout";
 import ViewCart from "../Components/ViewCart/ViewCart";
+import Register from "../Components/Register/Register";
 
 import MenuIcon from "@material-ui/icons/Menu";
 import HomeIcon from "@material-ui/icons/Home";
@@ -19,7 +20,7 @@ const routes = [
 	{
 		path: "/CreateAnAccount",
 		sidebarName: "Create An Account",
-		component: Login,
+		component: Register,
 		authRequired: false,
 		icon: MenuIcon,
 	},

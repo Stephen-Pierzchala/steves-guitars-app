@@ -10,7 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
 
 const useStyles = makeStyles((theme) => ({
-	logInBox: {
+	RegisterBox: {
 		// backgroundColor: theme.palette.primary.main,
 		marginTop: theme.spacing(14),
 	},
@@ -35,15 +35,19 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const Login = () => {
+const Register = () => {
 	const styles = useStyles();
 
 	return (
-		<Container component="main" className={styles.logInBox} maxWidth="sm">
+		<Container
+			component="main"
+			className={styles.RegisterBox}
+			maxWidth="sm"
+		>
 			<CssBaseline>
 				<Paper className={styles.paper} elevation={5}>
 					<Typography className={styles.titleText} variant="h4">
-						Log In
+						Create an Account
 					</Typography>
 
 					<form className={styles.form} action="">
@@ -67,7 +71,17 @@ const Login = () => {
 							label="Password"
 							name="password"
 							autoComplete="current-password"
-							autoFocus
+						/>
+
+						<Textfield
+							variant="outlined"
+							margin="normal"
+							required
+							fullWidth
+							id="confirmPassword"
+							label="Confirm Password"
+							name="confirmPassword"
+							autoComplete="current-password"
 						/>
 
 						<Button
@@ -80,7 +94,7 @@ const Login = () => {
 							disableRipple
 							disableFocusRipple
 						>
-							Log in
+							Register
 						</Button>
 					</form>
 					<Grid
@@ -91,7 +105,7 @@ const Login = () => {
 					>
 						<Grid item className={styles.linkText}>
 							<Link href="#" variant="body2">
-								New Kid in Town? Sign Up
+								Already Have An Account? Sign In
 							</Link>
 						</Grid>
 					</Grid>
@@ -101,4 +115,4 @@ const Login = () => {
 	);
 };
 
-export default Login;
+export default Register;
