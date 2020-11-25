@@ -17,6 +17,13 @@ const routes = [
 		icon: MenuIcon,
 	},
 	{
+		path: "/CreateAnAccount",
+		sidebarName: "Create An Account",
+		component: Login,
+		authRequired: false,
+		icon: MenuIcon,
+	},
+	{
 		path: "/Checkout",
 		sidebarName: "Checkout",
 		component: Checkout,

@@ -11,7 +11,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -41,6 +41,14 @@ const Navbar = (props) => {
 	return (
 		<nav>
 			<div className={classes.appBarSpacer}></div>
+			<Drawer
+				anchor="left"
+				open={isOpen}
+				onClose={() => setOpen(false)}
+				classes={{ paper: classes.drawer }}
+			>
+				<NavLinks />
+			</Drawer>
 			<AppBar variant="outlined">
 				<Toolbar>
 					<IconButton
@@ -53,15 +61,6 @@ const Navbar = (props) => {
 						<MenuIcon />
 					</IconButton>
 
-					<Drawer
-						anchor="left"
-						open={isOpen}
-						onClose={() => setOpen(false)}
-						classes={{ paper: classes.drawer }}
-					>
-						<NavLinks />
-					</Drawer>
-
 					{/* Ternary for portrait icon or logged in */}
 					<Button color="inherit">Login</Button>
 				</Toolbar>
@@ -71,11 +70,15 @@ const Navbar = (props) => {
 };
 
 // Goes inside of the navigation drawer, Shows all the links
-const NavLinks = (currentPath) => {
+const NavLinks = (props) => {
 	const classes = useStyles();
-	// const isActive = (arg) => {
-	// 	currentPath;
-	// };
+
+	const [currentPage, setCurrentPage] = useState(useLocation().pathname);
+
+	const isActive = (path) => {
+		return path === currentPage;
+	};
+
 	return (
 		<React.Fragment>
 			<List component="nav">
@@ -83,26 +86,22 @@ const NavLinks = (currentPath) => {
 					const Icon = routeItem.icon;
 					return (
 						<NavLink
+							key={routeItem.path}
 							to={routeItem.path}
 							className={classes.navLink}
-							activeStyle={{
-								color: "blue",
-								backgroundColor: "blue",
+							onClick={() => {
+								setCurrentPage(routeItem.path);
 							}}
-							exact
 						>
 							<ListItem
-								key={routeItem.path}
-								// selected={isActive(routeItem.path)}
+								// key={routeItem.path}
+								selected={isActive(routeItem.path)}
 								button
 							>
 								<ListItemIcon>
 									<Icon />
 								</ListItemIcon>
-								<ListItemText
-									primary={routeItem.sidebarName}
-									// primaryTypographyProps={{ variant: "button" }}
-								/>
+								<ListItemText primary={routeItem.sidebarName} />
 							</ListItem>
 						</NavLink>
 					);
