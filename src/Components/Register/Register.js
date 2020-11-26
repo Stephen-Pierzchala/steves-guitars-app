@@ -40,8 +40,8 @@ const Register = () => {
 
 	return (
 		<Container
-			component="main"
 			className={styles.RegisterBox}
+			component="main"
 			maxWidth="sm"
 		>
 			<CssBaseline>
