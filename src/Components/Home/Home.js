@@ -4,16 +4,14 @@ import {
 	CssBaseline,
 	Paper,
 	Grid,
-	Popover,
 	Button,
 	Typography,
-	Slider,
 	TextField,
 	Divider,
 } from "@material-ui/core";
-import { Rating } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import Product from "./Product";
+import Filter from "./Filter";
 
 // Style the homepage
 const useStyles = makeStyles((theme) => ({
@@ -25,12 +23,7 @@ const useStyles = makeStyles((theme) => ({
 	controls: {
 		marginBottom: theme.spacing(4),
 	},
-	filterOptions: {
-		textAlign: "center",
-		minWidth: "300px",
-		padding: theme.spacing(10, 2),
-		// width: "300px",
-	},
+
 	controlButton: {
 		paddingBottom: theme.spacing(1),
 		textTransform: "none",
@@ -44,16 +37,13 @@ const useStyles = makeStyles((theme) => ({
 const Home = () => {
 	const styles = useStyles();
 
-	// const [filterOptions, setFilterOptions] = useState({
-	// 	minRating: 1,
-	// 	maxRating: 5,
-	// 	minPrice: 0,
-	// 	maxPrice: 100000,
-	// 	showAcoustics: true,
-	// 	showElectrics: true,
-	// });
-
-	const [filterMinMaxRating, setFilterMinMaxRating] = useState([1, 5]);
+	const [filterOptions, setFilterOptions] = useState({
+		minRating: 1,
+		minPrice: 0,
+		maxPrice: 100000,
+		showAcoustics: true,
+		showElectrics: true,
+	});
 
 	return (
 		<React.Fragment>
@@ -61,10 +51,14 @@ const Home = () => {
 				<CssBaseline />
 				<Paper className={styles.paper} variant="outlined" square>
 					<Controls
-						filterMinMaxRating={filterMinMaxRating}
-						setFilterMinMaxRating={setFilterMinMaxRating}
+						filterOptions={filterOptions}
+						setFilterOptions={setFilterOptions}
 					/>
 					<Divider />
+
+					{Object.keys(filterOptions).map((key) => {
+						return key + " " + filterOptions[key] + "    ";
+					})}
 
 					<Grid
 						className={styles.products}
@@ -103,21 +97,20 @@ const Home = () => {
 // The topmost bar that contains the filter/sort/search controls
 const Controls = (props) => {
 	const styles = useStyles();
+
 	const [isFilterOpen, setFilterOpen] = useState(false);
 	const [filterAnchor, setFilterAnchor] = useState(false);
-
-	const handleRatingChange = (event, newValue) => {
-		props.setFilterMinMaxRating(newValue);
-	};
 
 	return (
 		<React.Fragment>
 			<Grid className={styles.controls} container>
 				<Grid item xs={12}>
-					<TextField placeholder="Search for Keywords" fullWidth>
-						{" "}
-					</TextField>
+					<TextField
+						placeholder="Search for Keywords"
+						fullWidth
+					></TextField>
 				</Grid>
+
 				<Grid item xs={6}>
 					<Button
 						fullWidth
@@ -129,39 +122,16 @@ const Controls = (props) => {
 					>
 						<Typography variant="h6">Filter</Typography>
 					</Button>
-					<Popover
-						open={isFilterOpen}
-						onClose={() => {
-							setFilterOpen(false);
-						}}
-						anchorEl={filterAnchor}
-						anchorOrigin={{
-							vertical: "bottom",
-							horizontal: "center",
-						}}
-						transformOrigin={{
-							vertical: "top",
-							horizontal: "center",
-						}}
-						PaperProps={{
-							elevation: 3,
-							className: styles.filterOptions,
-						}}
-					>
-						<Slider
-							marks
-							step={1}
-							value={props.filterMinMaxRating}
-							onChange={handleRatingChange}
-							valueLabelDisplay="on"
-							min={1}
-							max={5}
-							track="inverted"
-							label="Rating"
-						/>
-						<Rating defaultValue={4.3}></Rating>
-					</Popover>
+					<Filter
+						isFilterOpen={isFilterOpen}
+						setFilterAnchor={setFilterAnchor}
+						filterAnchor={filterAnchor}
+						setFilterOpen={setFilterOpen}
+						filterOptions={props.filterOptions}
+						setFilterOptions={props.setFilterOptions}
+					/>
 				</Grid>
+
 				<Grid item xs={6}>
 					<Button
 						className={styles.controlButton}
