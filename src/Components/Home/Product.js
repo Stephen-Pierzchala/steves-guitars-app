@@ -4,7 +4,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Card, Grid, Fab } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import StarIcon from "@material-ui/icons/Star";
-import StarBorder from "@material-ui/icons/Star";
 import { Rating } from "@material-ui/lab";
 import "./Product.css";
 
@@ -55,7 +54,11 @@ const Product = (props) => {
 								color="primary"
 								size="small"
 							>
-								<StarIcon style={{ color: "gold" }} />
+								{props.isFavorite ? (
+									<StarIcon style={{ color: "gold" }} />
+								) : (
+									<StarIcon />
+								)}
 								Favorite
 							</Fab>
 						</Grid>

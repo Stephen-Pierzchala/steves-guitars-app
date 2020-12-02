@@ -64,9 +64,9 @@ const Home = () => {
 					/>
 					<Divider />
 
-					{Object.keys(filterOptions).map((key) => {
+					{/* {Object.keys(filterOptions).map((key) => {
 						return key + " " + filterOptions[key] + "    ";
-					})}
+					})} */}
 
 					<Grid
 						className={styles.products}
