@@ -12,6 +12,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import Product from "./Product";
 import Filter from "./Filter";
+import Sort from "./Sort";
 
 // Style the homepage
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,11 @@ const Home = () => {
 		showElectrics: true,
 	});
 
+	const [sortOptions, setSortOptions] = useState({
+		ascending: true,
+		method: "alphabetical",
+	});
+
 	return (
 		<React.Fragment>
 			<Container component="main" maxWidth="lg">
@@ -53,6 +59,8 @@ const Home = () => {
 					<Controls
 						filterOptions={filterOptions}
 						setFilterOptions={setFilterOptions}
+						sortOptions={sortOptions}
+						setSortOptions={setSortOptions}
 					/>
 					<Divider />
 
@@ -101,6 +109,9 @@ const Controls = (props) => {
 	const [isFilterOpen, setFilterOpen] = useState(false);
 	const [filterAnchor, setFilterAnchor] = useState(false);
 
+	const [isSortOpen, setSortOpen] = useState(false);
+	const [sortAnchor, setSortAnchor] = useState(false);
+
 	return (
 		<React.Fragment>
 			<Grid className={styles.controls} container>
@@ -136,12 +147,20 @@ const Controls = (props) => {
 					<Button
 						className={styles.controlButton}
 						onClick={(event) => {
-							setFilterAnchor(event.currentTarget);
-							setFilterOpen(true);
+							setSortAnchor(event.currentTarget);
+							setSortOpen(true);
 						}}
 					>
-						Sort
+						<Typography variant="h6">Sort</Typography>
 					</Button>
+					<Sort
+						isSortOpen={isSortOpen}
+						setSortOpen={setSortOpen}
+						sortAnchor={sortAnchor}
+						setSortAnchor={setSortAnchor}
+						sortOptions={props.sortOptions}
+						setSortOptions={props.setSortOptions}
+					/>
 				</Grid>
 			</Grid>
 		</React.Fragment>
