@@ -79,21 +79,28 @@ const Home = () => {
 							price={"500"}
 							description="a nice guitar to play with your friends, or whenever you want really!"
 							rating={5}
+							isFavorite={true}
 						/>
 						<Product
 							name="Fender Strat"
 							price={"500"}
 							description="a nice guitar to play with your friends, or whenever you want really!"
+							rating={1}
+							isFavorite={false}
 						/>
 						<Product
 							name="Fender Strat"
 							price={"500"}
 							description="a nice guitar to play with your friends, or whenever you want really!"
+							rating={3}
+							isFavorite={true}
 						/>
 						<Product
 							name="Fender Strat"
 							price={"500"}
 							description="a nice guitar to play with your friends, or whenever you want really!"
+							rating={4}
+							isFavorite={false}
 						/>
 					</Grid>
 				</Paper>
