@@ -6,7 +6,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import StarIcon from "@material-ui/icons/Star";
 import { Rating } from "@material-ui/lab";
 import "./Product.css";
-import { addToCart } from "../../Controllers/Cart.js";
+import { addToCart, removeFromCart } from "../../Controllers/Cart.js";
 
 const useStyles = makeStyles((theme) => ({
 	icons: {
@@ -54,6 +54,7 @@ const Product = (props) => {
 								variant="extended"
 								color="primary"
 								size="small"
+								onClick={() => removeFromCart(props.id)}
 							>
 								{props.isFavorite ? (
 									<StarIcon style={{ color: "gold" }} />
