@@ -1,7 +1,6 @@
 import React from "react";
-import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Card, Grid, Fab } from "@material-ui/core";
+import { Paper, Grid, Fab } from "@material-ui/core";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import StarIcon from "@material-ui/icons/Star";
 import { Rating } from "@material-ui/lab";
