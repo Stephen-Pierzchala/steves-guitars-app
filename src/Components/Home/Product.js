@@ -6,6 +6,7 @@ import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import StarIcon from "@material-ui/icons/Star";
 import { Rating } from "@material-ui/lab";
 import "./Product.css";
+import { addToCart } from "../../Controllers/Cart.js";
 
 const useStyles = makeStyles((theme) => ({
 	icons: {
@@ -63,7 +64,13 @@ const Product = (props) => {
 							</Fab>
 						</Grid>
 						<Grid item>
-							<Fab color="primary" size="small">
+							<Fab
+								color="primary"
+								size="small"
+								onClick={() => {
+									addToCart(props.id);
+								}}
+							>
 								<AddShoppingCartIcon />
 							</Fab>
 						</Grid>
