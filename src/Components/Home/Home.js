@@ -80,6 +80,7 @@ const Home = () => {
 							description="a nice guitar to play with your friends, or whenever you want really!"
 							rating={5}
 							isFavorite={true}
+							id={1}
 						/>
 						<Product
 							name="Fender Strat"
@@ -87,6 +88,7 @@ const Home = () => {
 							description="a nice guitar to play with your friends, or whenever you want really!"
 							rating={1}
 							isFavorite={false}
+							id={3}
 						/>
 						<Product
 							name="Fender Strat"
@@ -94,6 +96,7 @@ const Home = () => {
 							description="a nice guitar to play with your friends, or whenever you want really!"
 							rating={3}
 							isFavorite={true}
+							id={4}
 						/>
 						<Product
 							name="Fender Strat"
@@ -101,6 +104,7 @@ const Home = () => {
 							description="a nice guitar to play with your friends, or whenever you want really!"
 							rating={4}
 							isFavorite={false}
+							id={5}
 						/>
 					</Grid>
 				</Paper>
