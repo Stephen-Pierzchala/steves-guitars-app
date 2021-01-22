@@ -60,9 +60,6 @@ const Navbar = (props) => {
 					>
 						<MenuIcon />
 					</IconButton>
-
-					{/* Ternary for portrait icon or logged in */}
-					<Button color="inherit">Login</Button>
 				</Toolbar>
 			</AppBar>
 		</nav>

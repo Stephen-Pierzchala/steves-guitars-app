@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Container,
 	CssBaseline,
@@ -8,11 +8,13 @@ import {
 	Typography,
 	TextField,
 	Divider,
+	CircularProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Product from "./Product";
 import Filter from "./Filter";
 import Sort from "./Sort";
+const axios = require("axios");
 
 // Style the homepage
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
 	products: {
 		marginTop: theme.spacing(2),
 	},
+	searchBar: {
+		marginBottom: theme.spacing(4),
+	},
 }));
 
 // The entire homepage component.
@@ -50,6 +55,28 @@ const Home = () => {
 		ascending: true,
 		method: "alphabetical",
 	});
+
+	const [productList, setProductList] = useState([]);
+
+	useEffect(() => {
+		const url = process.env.REACT_APP_API_URL;
+		axios
+			.get(url, {
+				// params: {
+				// 	ID: 12345,
+				// },
+			})
+			.then(function (response) {
+				console.log(response.data.products);
+				setProductList(response.data.products);
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
+			.then(function () {
+				console.log("done.");
+			});
+	}, []);
 
 	return (
 		<React.Fragment>
@@ -74,38 +101,27 @@ const Home = () => {
 						alignItems="center"
 						spacing={3}
 					>
-						<Product
-							name="Fender Stratocaster"
-							price={"500"}
-							description="a nice guitar to play with your friends, or whenever you want really!"
-							rating={5}
-							isFavorite={true}
-							id={1}
-						/>
-						<Product
-							name="Fender Strat"
-							price={"500"}
-							description="a nice guitar to play with your friends, or whenever you want really!"
-							rating={1}
-							isFavorite={false}
-							id={3}
-						/>
-						<Product
-							name="Fender Strat"
-							price={"500"}
-							description="a nice guitar to play with your friends, or whenever you want really!"
-							rating={3}
-							isFavorite={true}
-							id={4}
-						/>
-						<Product
-							name="Fender Strat"
-							price={"500"}
-							description="a nice guitar to play with your friends, or whenever you want really!"
-							rating={4}
-							isFavorite={false}
-							id={5}
-						/>
+						{productList.length ? (
+							productList.map((product) => {
+								return (
+									<Product
+										key={product.id}
+										name={product.name}
+										price={product.price}
+										description={product.description}
+										type={product.type}
+										rating={product.rating}
+										isFavorite={true}
+										imageLink={product.imageLink}
+										id={product.id}
+									/>
+								);
+							})
+						) : (
+							<Grid container justify="center">
+								<CircularProgress justtifyContent="center" />
+							</Grid>
+						)}
 					</Grid>
 				</Paper>
 			</Container>
@@ -128,6 +144,7 @@ const Controls = (props) => {
 			<Grid className={styles.controls} container>
 				<Grid item xs={12}>
 					<TextField
+						className={styles.searchBar}
 						placeholder="Search for Keywords"
 						fullWidth
 					></TextField>
@@ -156,6 +173,7 @@ const Controls = (props) => {
 
 				<Grid item xs={6}>
 					<Button
+						fullWidth
 						className={styles.controlButton}
 						onClick={(event) => {
 							setSortAnchor(event.currentTarget);
