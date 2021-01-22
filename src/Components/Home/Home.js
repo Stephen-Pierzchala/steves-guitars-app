@@ -60,6 +60,7 @@ const Home = () => {
 
 	useEffect(() => {
 		const url = process.env.REACT_APP_API_URL;
+		console.log(url);
 		axios
 			.get(url, {
 				// params: {
@@ -72,6 +73,7 @@ const Home = () => {
 			})
 			.catch(function (error) {
 				console.log(error);
+				console.log(url);
 			})
 			.then(function () {
 				console.log("done.");
