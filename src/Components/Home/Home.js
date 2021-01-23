@@ -59,7 +59,7 @@ const Home = () => {
 	const [productList, setProductList] = useState([]);
 
 	useEffect(() => {
-		const url = process.env.REACT_APP_API_URL;
+		const url = process.env.REACT_APP_API_URL + "products/getproducts";
 		console.log(url);
 		axios
 			.get(url, {
