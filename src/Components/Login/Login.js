@@ -45,6 +45,9 @@ const Login = () => {
 		password: "",
 	});
 
+	const defaultState = { email: false, password: false, errorText: "" };
+	const [errorState, setErrorState] = useState(defaultState);
+
 	const handleChange = (event) => {
 		const name = event.target.name;
 		setState({ ...state, [name]: event.target.value });
@@ -54,17 +57,30 @@ const Login = () => {
 		event.preventDefault();
 
 		const url = process.env.REACT_APP_API_URL + "auth/login";
-		console.log(url);
 		axios
 			.post(url, state)
 			.then(function (response) {
 				console.log(response);
+				setErrorState(defaultState);
+
+				console.log("successs");
 			})
 			.catch(function (error) {
-				console.log(error);
-			})
-			.then(function () {
-				console.log("done.");
+				if (
+					error.response &&
+					(error.response.status === 401 ||
+						error.response.status === 400)
+				) {
+					setErrorState({
+						...defaultState,
+						...error.response.data,
+					});
+				} else {
+					setErrorState({
+						...defaultState,
+						errorText: "malformed request.",
+					});
+				}
 			});
 	};
 
@@ -94,6 +110,7 @@ const Login = () => {
 							autoFocus
 							value={state.email}
 							onChange={handleChange}
+							error={errorState.email}
 						/>
 						<Textfield
 							InputLabelProps={{ shrink: true }}
@@ -109,9 +126,15 @@ const Login = () => {
 							autoFocus
 							value={state.password}
 							onChange={handleChange}
-							error={state.emailError}
+							error={errorState.password}
 						/>
-
+						<Grid container justify="center">
+							<Grid item>
+								<h3 style={{ color: "red" }}>
+									{errorState.errorText}
+								</h3>
+							</Grid>
+						</Grid>
 						<Button
 							className={styles.submitButton}
 							type="submit"
