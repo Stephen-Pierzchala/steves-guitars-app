@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
 	RegisterBox: {
@@ -38,6 +39,34 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
 	const styles = useStyles();
 
+	const [state, setState] = useState({
+		email: "",
+		password: "",
+		confirmPassword: "",
+	});
+
+	const handleChange = (event) => {
+		setState({ ...state, [event.target.name]: event.target.value });
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+
+		const url = process.env.REACT_APP_API_URL + "auth/register";
+		console.log(url);
+		axios
+			.post(url, state)
+			.then(function (response) {
+				console.log(response);
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
+			.then(function () {
+				console.log("done.");
+			});
+	};
+
 	return (
 		<Container
 			className={styles.RegisterBox}
@@ -50,7 +79,11 @@ const Register = () => {
 						Create an Account
 					</Typography>
 
-					<form className={styles.form} action="">
+					<form
+						className={styles.form}
+						onSubmit={handleSubmit}
+						action=""
+					>
 						<Textfield
 							variant="outlined"
 							margin="normal"
@@ -61,6 +94,9 @@ const Register = () => {
 							name="email"
 							autoComplete="email"
 							autoFocus
+							onChange={handleChange}
+							value={state.email}
+							InputLabelProps={{ shrink: true }}
 						/>
 						<Textfield
 							variant="outlined"
@@ -71,6 +107,10 @@ const Register = () => {
 							label="Password"
 							name="password"
 							autoComplete="current-password"
+							onChange={handleChange}
+							value={state.password}
+							InputLabelProps={{ shrink: true }}
+							type="password"
 						/>
 
 						<Textfield
@@ -82,6 +122,10 @@ const Register = () => {
 							label="Confirm Password"
 							name="confirmPassword"
 							autoComplete="current-password"
+							onChange={handleChange}
+							value={state.confirmPassword}
+							InputLabelProps={{ shrink: true }}
+							type="password"
 						/>
 
 						<Button
