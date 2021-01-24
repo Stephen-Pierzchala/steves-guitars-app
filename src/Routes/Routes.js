@@ -16,6 +16,7 @@ const routes = [
 		component: Login,
 		authRequired: false,
 		icon: MenuIcon,
+		public: true,
 	},
 	{
 		path: "/CreateAnAccount",
@@ -23,6 +24,7 @@ const routes = [
 		component: Register,
 		authRequired: false,
 		icon: MenuIcon,
+		public: true,
 	},
 	{
 		path: "/Checkout",
@@ -30,6 +32,7 @@ const routes = [
 		component: Checkout,
 		authRequired: true,
 		icon: DoneIcon,
+		public: false,
 	},
 	{
 		path: "/ViewCart",
@@ -37,6 +40,7 @@ const routes = [
 		component: ViewCart,
 		authRequired: false,
 		icon: ShoppingCartIcon,
+		public: false,
 	},
 	{
 		path: "/",
@@ -44,6 +48,7 @@ const routes = [
 		component: Home,
 		authRequired: false,
 		icon: HomeIcon,
+		public: true,
 	},
 ];
 

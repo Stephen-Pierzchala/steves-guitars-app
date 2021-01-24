@@ -58,8 +58,37 @@ const Home = () => {
 
 	const [productList, setProductList] = useState([]);
 
+	const applyOptions = () => {
+		let guitars = productList;
+		guitars.sort((a, b) => {
+			return a.name.localeCompare(b.name);
+		});
+		guitars = guitars.filter((item) => {
+			return item.type === "Acoustic";
+		});
+
+		return guitars.map((product) => {
+			return (
+				<Product
+					key={product.id}
+					name={product.name}
+					price={product.price}
+					description={product.description}
+					type={product.type}
+					rating={product.rating}
+					isFavorite={true}
+					imageLink={product.imageLink}
+					id={product.id}
+				/>
+			);
+		});
+	};
+
+	useEffect(() => {}, [sortOptions, filterOptions]);
+
+	//fetch products on page load
 	useEffect(() => {
-		const url = process.env.REACT_APP_API_URL;
+		const url = process.env.REACT_APP_API_URL + "products/getproducts";
 		console.log(url);
 		axios
 			.get(url, {
@@ -103,7 +132,8 @@ const Home = () => {
 						alignItems="center"
 						spacing={3}
 					>
-						{productList.length ? (
+						{applyOptions()}
+						{/* {productList.length ? (
 							productList.map((product) => {
 								return (
 									<Product
@@ -121,9 +151,9 @@ const Home = () => {
 							})
 						) : (
 							<Grid container justify="center">
-								<CircularProgress justtifyContent="center" />
+								<CircularProgress />
 							</Grid>
-						)}
+						)} */}
 					</Grid>
 				</Paper>
 			</Container>

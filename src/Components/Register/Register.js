@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +8,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
 	RegisterBox: {
@@ -38,6 +40,55 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
 	const styles = useStyles();
 
+	const history = useHistory();
+
+	const [state, setState] = useState({
+		email: "",
+		password: "",
+		confirmPassword: "",
+	});
+
+	const defaultState = {
+		email: false,
+		password: false,
+		confirmPassword: false,
+		errorText: "",
+	};
+	const [errorState, setErrorState] = useState(defaultState);
+
+	const handleChange = (event) => {
+		setState({ ...state, [event.target.name]: event.target.value });
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+
+		const url = process.env.REACT_APP_API_URL + "auth/register";
+		axios
+			.post(url, state)
+			.then(function (response) {
+				setErrorState(defaultState);
+				history.push("/Login");
+			})
+			.catch(function (error) {
+				if (
+					error.response &&
+					(error.response.status === 401 ||
+						error.response.status === 400)
+				) {
+					setErrorState({
+						...defaultState,
+						...error.response.data,
+					});
+				} else {
+					setErrorState({
+						...defaultState,
+						errorText: "malformed request.",
+					});
+				}
+			});
+	};
+
 	return (
 		<Container
 			className={styles.RegisterBox}
@@ -50,7 +101,11 @@ const Register = () => {
 						Create an Account
 					</Typography>
 
-					<form className={styles.form} action="">
+					<form
+						className={styles.form}
+						onSubmit={handleSubmit}
+						action=""
+					>
 						<Textfield
 							variant="outlined"
 							margin="normal"
@@ -61,6 +116,10 @@ const Register = () => {
 							name="email"
 							autoComplete="email"
 							autoFocus
+							onChange={handleChange}
+							value={state.email}
+							InputLabelProps={{ shrink: true }}
+							error={errorState.email}
 						/>
 						<Textfield
 							variant="outlined"
@@ -71,6 +130,11 @@ const Register = () => {
 							label="Password"
 							name="password"
 							autoComplete="current-password"
+							onChange={handleChange}
+							value={state.password}
+							InputLabelProps={{ shrink: true }}
+							type="password"
+							error={errorState.password}
 						/>
 
 						<Textfield
@@ -82,7 +146,19 @@ const Register = () => {
 							label="Confirm Password"
 							name="confirmPassword"
 							autoComplete="current-password"
+							onChange={handleChange}
+							value={state.confirmPassword}
+							InputLabelProps={{ shrink: true }}
+							type="password"
+							error={errorState.confirmPassword}
 						/>
+						<Grid container justify="center">
+							<Grid item>
+								<h3 style={{ color: "red" }}>
+									{errorState.errorText}
+								</h3>
+							</Grid>
+						</Grid>
 
 						<Button
 							className={styles.submitButton}
@@ -104,7 +180,11 @@ const Register = () => {
 						spacing={3}
 					>
 						<Grid item className={styles.linkText}>
-							<Link href="#" variant="body2">
+							<Link
+								variant="body2"
+								component={RouterLink}
+								to="/Login"
+							>
 								Already Have An Account? Sign In
 							</Link>
 						</Grid>

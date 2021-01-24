@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import React from "react";
 import Navbar from "./Components/Navigation/Navbar";
 import routes from "./Routes/Routes";
+import PrivateRoute from "./Routes/PrivateRoute";
 
 function App() {
 	return (
@@ -11,14 +12,22 @@ function App() {
 
 			<Switch>
 				{routes.reverse().map((arg) => {
-					return (
-						<Route
-							key={arg.path}
-							path={arg.path}
-							component={arg.component}
-							exact
-						/>
-					);
+					if (arg.public)
+						return (
+							<Route
+								key={arg.path}
+								path={arg.path}
+								component={arg.component}
+							/>
+						);
+					else
+						return (
+							<PrivateRoute
+								key={arg.path}
+								path={arg.path}
+								component={arg.component}
+							/>
+						);
 				})}
 			</Switch>
 		</React.Fragment>

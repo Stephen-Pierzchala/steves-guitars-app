@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -8,6 +8,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+import { Link as RouterLink, useHistory } from "react-router-dom";
+const authTool = require("../../Auth/auth");
+const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
 	logInBox: {
@@ -33,10 +36,59 @@ const useStyles = makeStyles((theme) => ({
 		width: "100%",
 		padding: theme.spacing(0, 4),
 	},
+	helpText: {
+		fontSize: ".75rem",
+		color: "#666",
+	},
 }));
 
 const Login = () => {
 	const styles = useStyles();
+
+	const history = useHistory();
+
+	const [state, setState] = useState({
+		email: "",
+		password: "",
+	});
+
+	const defaultState = { email: false, password: false, errorText: "" };
+	const [errorState, setErrorState] = useState(defaultState);
+
+	const handleChange = (event) => {
+		const name = event.target.name;
+		setState({ ...state, [name]: event.target.value });
+	};
+
+	const handleSubmit = (event) => {
+		event.preventDefault();
+
+		const url = process.env.REACT_APP_API_URL + "auth/login";
+		axios
+			.post(url, state)
+			.then(function (response) {
+				setErrorState(defaultState);
+				authTool.setAccessToken(response.data.token);
+				history.push("/");
+			})
+			.catch(function (error) {
+				if (
+					error.response &&
+					(error.response.status === 401 ||
+						error.response.status === 400)
+				) {
+					setErrorState({
+						...defaultState,
+						...error.response.data,
+					});
+				} else {
+					setErrorState({
+						...defaultState,
+						errorText: "malformed request.",
+					});
+				}
+			});
+	};
 
 	return (
 		<Container component="main" className={styles.logInBox} maxWidth="sm">
@@ -45,9 +97,20 @@ const Login = () => {
 					<Typography className={styles.titleText} variant="h4">
 						Log In
 					</Typography>
+					<Typography variant="p" className={styles.helpText}>
+						For Your Convenience...
+					</Typography>
+					<Typography variant="p" className={styles.helpText}>
+						Username: test, Password: pass
+					</Typography>
 
-					<form className={styles.form} action="">
+					<form
+						className={styles.form}
+						onSubmit={handleSubmit}
+						action=""
+					>
 						<Textfield
+							InputLabelProps={{ shrink: true }}
 							variant="outlined"
 							margin="normal"
 							required
@@ -57,8 +120,13 @@ const Login = () => {
 							name="email"
 							autoComplete="email"
 							autoFocus
+							value={state.email}
+							onChange={handleChange}
+							error={errorState.email}
 						/>
 						<Textfield
+							InputLabelProps={{ shrink: true }}
+							type="password"
 							variant="outlined"
 							margin="normal"
 							required
@@ -68,8 +136,17 @@ const Login = () => {
 							name="password"
 							autoComplete="current-password"
 							autoFocus
+							value={state.password}
+							onChange={handleChange}
+							error={errorState.password}
 						/>
-
+						<Grid container justify="center">
+							<Grid item>
+								<h3 style={{ color: "red" }}>
+									{errorState.errorText}
+								</h3>
+							</Grid>
+						</Grid>
 						<Button
 							className={styles.submitButton}
 							type="submit"
@@ -90,8 +167,12 @@ const Login = () => {
 						spacing={3}
 					>
 						<Grid item className={styles.linkText}>
-							<Link href="#" variant="body2">
-								New Kid in Town? Sign Up
+							<Link
+								variant="body2"
+								component={RouterLink}
+								to="/CreateAnAccount"
+							>
+								Already Have An Account? Sign In
 							</Link>
 						</Grid>
 					</Grid>
