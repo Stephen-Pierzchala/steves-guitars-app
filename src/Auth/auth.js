@@ -15,4 +15,8 @@ const setAccessToken = (token) => {
 	return;
 };
 
-module.exports = { getAccessToken, isAuthenticated, setAccessToken };
+const logOut = () => {
+	setAccessToken(null);
+};
+
+module.exports = { getAccessToken, isAuthenticated, setAccessToken, logOut };

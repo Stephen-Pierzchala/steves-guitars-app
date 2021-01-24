@@ -10,7 +10,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { NavLink, useLocation } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
+import authTool from "../../Auth/auth";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -50,15 +53,22 @@ const Navbar = (props) => {
 			</Drawer>
 			<AppBar variant="outlined">
 				<Toolbar>
-					<IconButton
-						edge="start"
-						className={classes.menuButton}
-						color="inherit"
-						aria-label="menu"
-						onClick={() => setOpen(true)}
-					>
-						<MenuIcon />
-					</IconButton>
+					<Grid container alignItems="center" justify="space-between">
+						<Grid item>
+							<IconButton
+								edge="start"
+								className={classes.menuButton}
+								color="inherit"
+								aria-label="menu"
+								onClick={() => setOpen(true)}
+							>
+								<MenuIcon />
+							</IconButton>
+						</Grid>
+						<Grid>
+							<h3>Steve's Guitar Shop</h3>
+						</Grid>
+					</Grid>
 				</Toolbar>
 			</AppBar>
 		</nav>
@@ -67,42 +77,72 @@ const Navbar = (props) => {
 
 // Goes inside of the navigation drawer, Shows all the links
 const NavLinks = (props) => {
+	const history = useHistory();
 	const classes = useStyles();
-
-	const [currentPage, setCurrentPage] = useState(useLocation().pathname);
+	const location = useLocation();
+	const [currentPage, setCurrentPage] = useState(location.pathname);
 
 	const isActive = (path) => {
 		return path === currentPage;
 	};
-
 	return (
 		<React.Fragment>
 			<List component="nav">
-				{routes.map((routeItem) => {
-					const Icon = routeItem.icon;
-					return (
-						<NavLink
-							key={routeItem.path}
-							to={routeItem.path}
-							className={classes.navLink}
-							onClick={() => {
-								setCurrentPage(routeItem.path);
-								props.setOpen(false);
-							}}
-						>
-							<ListItem
-								// key={routeItem.path}
-								selected={isActive(routeItem.path)}
-								button
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					align="center"
+				>
+					{routes.map((routeItem) => {
+						const Icon = routeItem.icon;
+						return (
+							<Grid item>
+								<NavLink
+									key={routeItem.path}
+									to={routeItem.path}
+									className={classes.navLink}
+									onClick={() => {
+										setCurrentPage(routeItem.path);
+										props.setOpen(false);
+									}}
+								>
+									<ListItem
+										// key={routeItem.path}
+										selected={isActive(routeItem.path)}
+										button
+									>
+										<ListItemIcon>
+											<Icon />
+										</ListItemIcon>
+										<ListItemText
+											primary={routeItem.sidebarName}
+										/>
+									</ListItem>
+								</NavLink>
+							</Grid>
+						);
+					})}
+					{authTool.isAuthenticated() && (
+						<Grid item align="center" justify="center">
+							<Button
+								fullWidth
+								variant="outlined"
+								size="small"
+								color="secondary"
+								disableFocusRipple
+								onClick={() => {
+									authTool.logOut();
+									history.push("/Login");
+									setCurrentPage("/Login");
+									return;
+								}}
 							>
-								<ListItemIcon>
-									<Icon />
-								</ListItemIcon>
-								<ListItemText primary={routeItem.sidebarName} />
-							</ListItem>
-						</NavLink>
-					);
-				})}
+								Log Out
+							</Button>
+						</Grid>
+					)}
+				</Grid>
 			</List>
 		</React.Fragment>
 	);

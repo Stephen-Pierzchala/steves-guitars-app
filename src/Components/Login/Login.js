@@ -36,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
 		width: "100%",
 		padding: theme.spacing(0, 4),
 	},
+	helpText: {
+		fontSize: ".75rem",
+		color: "#666",
+	},
 }));
 
 const Login = () => {
@@ -64,7 +68,7 @@ const Login = () => {
 			.post(url, state)
 			.then(function (response) {
 				setErrorState(defaultState);
-				authTool.setAccessToken({ data: "tokenData" });
+				authTool.setAccessToken(response.data.token);
 				history.push("/");
 			})
 			.catch(function (error) {
@@ -92,6 +96,12 @@ const Login = () => {
 				<Paper className={styles.paper} elevation={5}>
 					<Typography className={styles.titleText} variant="h4">
 						Log In
+					</Typography>
+					<Typography variant="p" className={styles.helpText}>
+						For Your Convenience...
+					</Typography>
+					<Typography variant="p" className={styles.helpText}>
+						Username: test, Password: pass
 					</Typography>
 
 					<form
