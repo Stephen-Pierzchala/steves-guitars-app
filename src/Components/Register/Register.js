@@ -8,7 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
 	const styles = useStyles();
 
+	const history = useHistory();
+
 	const [state, setState] = useState({
 		email: "",
 		password: "",
@@ -62,14 +64,11 @@ const Register = () => {
 		event.preventDefault();
 
 		const url = process.env.REACT_APP_API_URL + "auth/register";
-		console.log(url);
 		axios
 			.post(url, state)
 			.then(function (response) {
-				console.log(response);
 				setErrorState(defaultState);
-
-				console.log("success!");
+				history.push("/Login");
 			})
 			.catch(function (error) {
 				if (

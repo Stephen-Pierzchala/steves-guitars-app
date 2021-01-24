@@ -63,7 +63,6 @@ const Login = () => {
 		axios
 			.post(url, state)
 			.then(function (response) {
-				console.log(response);
 				setErrorState(defaultState);
 				authTool.setAccessToken({ data: "tokenData" });
 				history.push("/");
