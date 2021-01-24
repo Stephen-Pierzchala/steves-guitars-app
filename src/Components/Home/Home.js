@@ -121,7 +121,7 @@ const Home = () => {
 							})
 						) : (
 							<Grid container justify="center">
-								<CircularProgress justtifyContent="center" />
+								<CircularProgress />
 							</Grid>
 						)}
 					</Grid>

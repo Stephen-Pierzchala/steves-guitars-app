@@ -8,7 +8,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
-
+import { Link as RouterLink, useHistory } from "react-router-dom";
+const authTool = require("../../Auth/auth");
 const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +41,8 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
 	const styles = useStyles();
 
+	const history = useHistory();
+
 	const [state, setState] = useState({
 		email: "",
 		password: "",
@@ -62,8 +65,8 @@ const Login = () => {
 			.then(function (response) {
 				console.log(response);
 				setErrorState(defaultState);
-
-				console.log("successs");
+				authTool.setAccessToken({ data: "tokenData" });
+				history.push("/");
 			})
 			.catch(function (error) {
 				if (
@@ -155,8 +158,12 @@ const Login = () => {
 						spacing={3}
 					>
 						<Grid item className={styles.linkText}>
-							<Link href="#" variant="body2">
-								New Kid in Town? Sign Up
+							<Link
+								variant="body2"
+								component={RouterLink}
+								to="/CreateAnAccount"
+							>
+								Already Have An Account? Sign In
 							</Link>
 						</Grid>
 					</Grid>

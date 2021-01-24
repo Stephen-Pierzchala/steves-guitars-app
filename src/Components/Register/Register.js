@@ -8,6 +8,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Link from "@material-ui/core/Link";
+import { Link as RouterLink } from "react-router-dom";
 const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
@@ -180,7 +181,11 @@ const Register = () => {
 						spacing={3}
 					>
 						<Grid item className={styles.linkText}>
-							<Link href="#" variant="body2">
+							<Link
+								variant="body2"
+								component={RouterLink}
+								to="/Login"
+							>
 								Already Have An Account? Sign In
 							</Link>
 						</Grid>

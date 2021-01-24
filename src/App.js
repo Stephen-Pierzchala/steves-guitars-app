@@ -1,9 +1,9 @@
 import "./App.css";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import React from "react";
 import Navbar from "./Components/Navigation/Navbar";
 import routes from "./Routes/Routes";
-const authTool = require("./Auth/auth");
+import PrivateRoute from "./Routes/PrivateRoute";
 
 function App() {
 	return (
@@ -12,20 +12,22 @@ function App() {
 
 			<Switch>
 				{routes.reverse().map((arg) => {
-					const Component = arg.component;
-					if (arg.public === true || authTool.isAuthenticated()) {
+					if (arg.public)
 						return (
-							<Route key={arg.path} path={arg.path} exact>
-								<Component />
-							</Route>
+							<Route
+								key={arg.path}
+								path={arg.path}
+								component={arg.component}
+							/>
 						);
-					} else {
+					else
 						return (
-							<Route key={arg.path} path={arg.path} exact>
-								<Redirect to="/Login" />
-							</Route>
+							<PrivateRoute
+								key={arg.path}
+								path={arg.path}
+								component={arg.component}
+							/>
 						);
-					}
 				})}
 			</Switch>
 		</React.Fragment>

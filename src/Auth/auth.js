@@ -1,18 +1,18 @@
 //access token will be stored here
-let accessToken = null;
+
+const getAccessToken = () => {
+	return JSON.parse(localStorage.getItem("accessToken"));
+};
 
 const isAuthenticated = () => {
-	console.log("checking to see if logged in...");
-	if (accessToken != null) {
-		console.log("Logged In!");
-		return true;
-	}
-	console.log("Not logged in.");
+	const accessToken = getAccessToken();
+	if (accessToken != null) return true;
 	return false;
 };
 
-const getAccessToken = () => {
-	return accessToken;
+const setAccessToken = (token) => {
+	localStorage.setItem("accessToken", JSON.stringify(token));
+	return;
 };
 
-module.exports = { isAuthenticated, getAccessToken };
+module.exports = { getAccessToken, isAuthenticated, setAccessToken };
