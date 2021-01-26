@@ -8,7 +8,6 @@ import {
 	Typography,
 	TextField,
 	Divider,
-	CircularProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Product from "./Product";
@@ -44,9 +43,9 @@ const Home = () => {
 	const styles = useStyles();
 
 	const [filterOptions, setFilterOptions] = useState({
-		minRating: 1,
+		minRating: 0,
 		minPrice: 0,
-		maxPrice: 100000,
+		maxPrice: Infinity,
 		showAcoustics: true,
 		showElectrics: true,
 	});
@@ -56,18 +55,65 @@ const Home = () => {
 		method: "alphabetical",
 	});
 
+	const [searchText, setSearchText] = useState("");
+
 	const [productList, setProductList] = useState([]);
 
 	const applyOptions = () => {
-		let guitars = productList;
-		guitars.sort((a, b) => {
-			return a.name.localeCompare(b.name);
-		});
-		guitars = guitars.filter((item) => {
-			return item.type === "Acoustic";
+		let displayed = productList;
+
+		//apply search text
+		if (searchText) {
+			displayed = displayed.filter((item) => {
+				return item.name.includes(searchText);
+			});
+		}
+
+		//Apply filters
+		displayed = displayed.filter((item) => {
+			return (
+				item.rating >= filterOptions.minRating &&
+				item.price >= filterOptions.minPrice &&
+				item.price <= filterOptions.maxPrice
+			);
 		});
 
-		return guitars.map((product) => {
+		if (!filterOptions.showElectrics) {
+			displayed = displayed.filter((item) => {
+				return item.type !== "Electric";
+			});
+		}
+
+		if (!filterOptions.showAcoustics) {
+			displayed = displayed.filter((item) => {
+				return item.type !== "Acoustic";
+			});
+		}
+
+		//Sort products
+
+		//rating, price, alphabetical, date added
+		switch (sortOptions.method) {
+			case "price":
+				displayed.sort((a, b) => a.price - b.price);
+				break;
+			case "dateAdded":
+				displayed.sort((a, b) => a.createdAt < b.createdAt);
+				break;
+			case "rating":
+				displayed.sort((a, b) => a.rating < b.rating);
+				break;
+			default:
+				//alphabetical
+				displayed.sort((a, b) => a.name.localeCompare(b.name));
+				break;
+		}
+
+		//reverse if descending
+		if (!sortOptions.ascending) displayed.reverse();
+
+		//display the products
+		return displayed.map((product) => {
 			return (
 				<Product
 					key={product.id}
@@ -79,33 +125,22 @@ const Home = () => {
 					isFavorite={true}
 					imageLink={product.imageLink}
 					id={product.id}
+					createdAt={product.createdAt}
 				/>
 			);
 		});
 	};
 
-	useEffect(() => {}, [sortOptions, filterOptions]);
-
 	//fetch products on page load
 	useEffect(() => {
 		const url = process.env.REACT_APP_API_URL + "products/getproducts";
-		console.log(url);
 		axios
-			.get(url, {
-				// params: {
-				// 	ID: 12345,
-				// },
-			})
+			.get(url)
 			.then(function (response) {
-				console.log(response.data.products);
 				setProductList(response.data.products);
 			})
 			.catch(function (error) {
 				console.log(error);
-				console.log(url);
-			})
-			.then(function () {
-				console.log("done.");
 			});
 	}, []);
 
@@ -115,16 +150,14 @@ const Home = () => {
 				<CssBaseline />
 				<Paper className={styles.paper} variant="outlined" square>
 					<Controls
+						searchText={searchText}
+						setSearchText={setSearchText}
 						filterOptions={filterOptions}
 						setFilterOptions={setFilterOptions}
 						sortOptions={sortOptions}
 						setSortOptions={setSortOptions}
 					/>
 					<Divider />
-
-					{/* {Object.keys(filterOptions).map((key) => {
-						return key + " " + filterOptions[key] + "    ";
-					})} */}
 
 					<Grid
 						className={styles.products}
@@ -133,27 +166,6 @@ const Home = () => {
 						spacing={3}
 					>
 						{applyOptions()}
-						{/* {productList.length ? (
-							productList.map((product) => {
-								return (
-									<Product
-										key={product.id}
-										name={product.name}
-										price={product.price}
-										description={product.description}
-										type={product.type}
-										rating={product.rating}
-										isFavorite={true}
-										imageLink={product.imageLink}
-										id={product.id}
-									/>
-								);
-							})
-						) : (
-							<Grid container justify="center">
-								<CircularProgress />
-							</Grid>
-						)} */}
 					</Grid>
 				</Paper>
 			</Container>
@@ -179,6 +191,10 @@ const Controls = (props) => {
 						className={styles.searchBar}
 						placeholder="Search for Keywords"
 						fullWidth
+						onChange={(event) => {
+							props.setSearchText(event.target.value);
+						}}
+						value={props.searchText}
 					></TextField>
 				</Grid>
 
