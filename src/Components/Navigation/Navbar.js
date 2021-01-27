@@ -103,9 +103,7 @@ const NavLinks = (props) => {
 									to={routeItem.path}
 									className={classes.navLink}
 									onClick={() => {
-										// setCurrentPage(routeItem.path);
-										history.push("/Login");
-
+										setCurrentPage(routeItem.path);
 										props.setOpen(false);
 									}}
 								>
