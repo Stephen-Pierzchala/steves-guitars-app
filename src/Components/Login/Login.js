@@ -64,6 +64,7 @@ const Login = () => {
 		event.preventDefault();
 
 		const url = process.env.REACT_APP_API_URL + "auth/login";
+		console.log(url);
 		axios
 			.post(url, state)
 			.then(function (response) {
@@ -97,12 +98,10 @@ const Login = () => {
 					<Typography className={styles.titleText} variant="h4">
 						Log In
 					</Typography>
-					<Typography variant="p" className={styles.helpText}>
-						For Your Convenience...
-					</Typography>
-					<Typography variant="p" className={styles.helpText}>
+					<p className={styles.helpText}>For Your Convenience...</p>
+					<p className={styles.helpText}>
 						Username: test, Password: pass
-					</Typography>
+					</p>
 
 					<form
 						className={styles.form}

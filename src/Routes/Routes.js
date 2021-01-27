@@ -1,55 +1,51 @@
-import Home from "../Components/Home/Home";
 import Login from "../Components/Login/Login";
 import Checkout from "../Components/Checkout/Checkout";
 import ViewCart from "../Components/ViewCart/ViewCart";
 import Register from "../Components/Register/Register";
 
-import MenuIcon from "@material-ui/icons/Menu";
-import HomeIcon from "@material-ui/icons/Home";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import DoneIcon from "@material-ui/icons/Done";
+import PaymentIcon from "@material-ui/icons/Payment";
+import AddIcon from "@material-ui/icons/Add";
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 
 const routes = [
 	{
 		path: "/Login",
 		sidebarName: "Login",
 		component: Login,
-		authRequired: false,
-		icon: MenuIcon,
+		icon: MeetingRoomIcon,
 		public: true,
 	},
 	{
 		path: "/CreateAnAccount",
 		sidebarName: "Create An Account",
 		component: Register,
-		authRequired: false,
-		icon: MenuIcon,
+		icon: AddIcon,
 		public: true,
 	},
 	{
 		path: "/Checkout",
 		sidebarName: "Checkout",
 		component: Checkout,
-		authRequired: true,
-		icon: DoneIcon,
+		icon: PaymentIcon,
 		public: false,
 	},
 	{
 		path: "/ViewCart",
 		sidebarName: "View Cart",
 		component: ViewCart,
-		authRequired: false,
 		icon: ShoppingCartIcon,
 		public: false,
 	},
-	{
-		path: "/",
-		sidebarName: "Home",
-		component: Home,
-		authRequired: false,
-		icon: HomeIcon,
-		public: true,
-	},
+	//The default route is added manually to properly configure with netlify
+	// {
+	// 	path: "/",
+	// 	sidebarName: "Home",
+	// 	component: Home,
+	// 	authRequired: false,
+	// 	icon: HomeIcon,
+	// 	public: true,
+	// },
 ];
 
 export default routes;

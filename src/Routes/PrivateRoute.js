@@ -7,7 +7,6 @@ const PrivateRoute = (props) => {
 		<Route
 			path={props.path}
 			key={props.key}
-			exact
 			render={() => {
 				if (authTool.isAuthenticated()) {
 					return <Comp />;

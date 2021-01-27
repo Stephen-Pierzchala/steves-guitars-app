@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import { NavLink, useLocation, useHistory } from "react-router-dom";
 import authTool from "../../Auth/auth";
+import HomeIcon from "@material-ui/icons/Home";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -94,12 +95,29 @@ const NavLinks = (props) => {
 					justify="center"
 					align="center"
 				>
+					<Grid item>
+						<NavLink
+							to="/"
+							className={classes.navLink}
+							onClick={() => {
+								setCurrentPage("/");
+								props.setOpen(false);
+							}}
+						>
+							<ListItem selected={isActive("/")} button>
+								<ListItemIcon>
+									<HomeIcon />
+								</ListItemIcon>
+								<ListItemText primary={"Home"} />
+							</ListItem>
+						</NavLink>
+					</Grid>
+
 					{routes.map((routeItem) => {
 						const Icon = routeItem.icon;
 						return (
-							<Grid item>
+							<Grid item key={routeItem.path}>
 								<NavLink
-									key={routeItem.path}
 									to={routeItem.path}
 									className={classes.navLink}
 									onClick={() => {
@@ -108,7 +126,6 @@ const NavLinks = (props) => {
 									}}
 								>
 									<ListItem
-										// key={routeItem.path}
 										selected={isActive(routeItem.path)}
 										button
 									>
@@ -124,7 +141,7 @@ const NavLinks = (props) => {
 						);
 					})}
 					{authTool.isAuthenticated() && (
-						<Grid item align="center" justify="center">
+						<Grid item align="center">
 							<Button
 								fullWidth
 								variant="outlined"
